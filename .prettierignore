@@ -10,4 +10,4 @@ yarn.lock
 
 # custom directories
 src/database/migration/**
-src/database/seeds/dumbs/**
+src/database/seeds/json/**
