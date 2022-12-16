@@ -6,7 +6,10 @@ import { AppService } from './app.service';
 import { UtilityModule } from './modules/utility/utility.module';
 import databaseConfig from './config/database.config';
 import { DataSource } from 'typeorm';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 import * as path from 'path';
+import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
 
 interface DatabaseConfig {
   host: string;
@@ -38,8 +41,10 @@ interface DatabaseConfig {
       },
     }),
     UtilityModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule {}

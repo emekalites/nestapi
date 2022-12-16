@@ -16,9 +16,6 @@ export class State extends BaseEntity {
   @JoinColumn({ name: 'country_id' })
   country: Country;
 
-  @Column({ type: 'varchar', default: 'admin' })
-  created_by: string;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', precision: 6 })
   created_at: Date;
 }
