@@ -7,14 +7,12 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { PasswordReset } from './entities/password-reset.entity';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as md5 from 'js-md5';
 import { JWTHelper } from './jwt-helper';
 
 @Injectable()
 export class AuthService {
-  private saltRounds = 10;
-
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -62,7 +60,8 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     try {
-      const password = await bcrypt.hash(registerDto.password, this.saltRounds);
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(registerDto.password, salt);
 
       const userData = { ...registerDto, password };
 
@@ -151,8 +150,10 @@ export class AuthService {
         throw new BadRequestException('invalid token or token not found');
       }
 
+      const salt = await bcrypt.genSalt(10);
+
       const user = await this.userRepository.findOneBy({ email: reset.email });
-      user.password = await bcrypt.hash(repeat_password, this.saltRounds);
+      user.password = await bcrypt.hash(repeat_password, salt);
       await user.save();
 
       await this.passwordResetRepository.delete(reset.id);
