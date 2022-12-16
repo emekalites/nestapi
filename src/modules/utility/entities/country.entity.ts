@@ -1,5 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { State } from './state.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'countries' })
 export class Country extends BaseEntity {
@@ -20,7 +19,4 @@ export class Country extends BaseEntity {
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', precision: 6 })
   created_at: Date;
-
-  @OneToMany(() => State, (state) => state.country)
-  state: State;
 }

@@ -9,4 +9,5 @@ dist
 yarn.lock
 
 # custom directories
-src/database/**
+src/database/migration/**
+src/database/seeds/dumbs/**

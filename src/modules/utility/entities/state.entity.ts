@@ -12,7 +12,7 @@ export class State extends BaseEntity {
   @Column({ type: 'varchar', length: 191 })
   code: string;
 
-  @ManyToOne(() => Country, (country) => country.state)
+  @ManyToOne(() => Country)
   @JoinColumn({ name: 'country_id' })
   country: Country;
 

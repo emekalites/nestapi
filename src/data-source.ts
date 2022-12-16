@@ -15,7 +15,7 @@ export default new DataSource({
   password: configService.get<string>('POSTGRES_PASSWORD'),
   database: configService.get<string>('POSTGRES_DATABASE'),
   migrationsTableName: 'migrations',
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [path.resolve(__dirname + '/../dist/**/*.entity{.ts,.js}')],
   migrations: [path.resolve(__dirname + '/../dist/database/migration/*{.ts,.js}')],
   synchronize: false,
   logging: configService.get<string>('MODE') === 'development',

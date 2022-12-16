@@ -26,14 +26,13 @@ interface DatabaseConfig {
         type: 'postgres',
         ...configService.get<DatabaseConfig>('database'),
         migrationsTableName: 'migrations',
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [path.resolve(__dirname + '/../dist/**/*.entity{.ts,.js}')],
         migrations: [path.resolve(__dirname + '/../dist/database/migration/*{.ts,.js}')],
         synchronize: false,
         logging: configService.get<string>('MODE') === 'development',
         uuidExtension: 'pgcrypto',
       }),
       dataSourceFactory: async (options) => {
-        console.log(options);
         const dataSource = await new DataSource(options).initialize();
         return dataSource;
       },
