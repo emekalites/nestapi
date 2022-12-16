@@ -10,6 +10,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import * as path from 'path';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
+import { StoresModule } from './modules/stores/stores.module';
 
 interface DatabaseConfig {
   host: string;
@@ -43,6 +44,7 @@ interface DatabaseConfig {
     UtilityModule,
     UserModule,
     AuthModule,
+    StoresModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
