@@ -1,11 +1,12 @@
+import { Callback, Context, Handler } from 'aws-lambda';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import compression from 'compression';
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
-import 'reflect-metadata';
-import { ConfigService } from '@nestjs/config';
+import serverlessExpress from '@vendia/serverless-express';
 import cookieParser from 'cookie-parser';
+import 'reflect-metadata';
 
 const options: SwaggerCustomOptions = {
   swaggerOptions: {
@@ -13,10 +14,10 @@ const options: SwaggerCustomOptions = {
   },
 };
 
+let server: Handler;
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  const configService = app.get(ConfigService);
 
   const corsOption = {
     origin: '*',
@@ -39,10 +40,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document, options);
 
-  const port = +configService.get('PORT');
+  await app.init();
 
-  await app.listen(port, async () => {
-    console.info(`Backend API running on: ${await app.getUrl()}`);
-  });
+  const expressApp = app.getHttpAdapter().getInstance();
+  return serverlessExpress({ app: expressApp });
 }
-bootstrap();
+
+export const handler: Handler = async (event: any, context: Context, callback: Callback) => {
+  server = server ?? (await bootstrap());
+  return server(event, context, callback);
+};

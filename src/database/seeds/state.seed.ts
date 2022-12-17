@@ -11,11 +11,13 @@ export class StateSeeder extends Seeder {
       try {
         const country = await dataSource.manager.getRepository(Country).findOneBy({ id: states[i].country_id });
 
-        await this.factory(StateFactory).create({
-          name: states[i].name,
-          code: `${states[i].state_code}${country.code}`,
-          country,
-        });
+        if (country) {
+          await this.factory(StateFactory).create({
+            name: states[i].name,
+            code: `${states[i].state_code}${country.code}`,
+            country,
+          });
+        }
       } catch (error) {
         console.log(error);
       }
